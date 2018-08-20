@@ -1,5 +1,12 @@
+///// Layer 1: The Language and its Libraries
+
+
 #include <vector>
 #include <iostream>
+
+
+
+///// Layer 2: Framework Layer
 
 
 
@@ -44,7 +51,7 @@ public:
 
 
 
-///// model layer, contains primitave classes
+///// Layer 3: Model Layer - contains primitave classes and simple functions to modify them
 
 
 
@@ -63,9 +70,21 @@ namespace Integer
 
 
 
-//////// Scene State layer (same layer height as a model layer, but contains the state, objects, etc in the scene)
+namespace WebAPIRequester
+{
+   class WebAPIRequester
+   {
+   public:
+      std::string url;
 
-namespace Scene
+      WebAPIRequester(std::string url) : url(url) {}
+      std::string response() { /* call url and get response */ return "{ \"response\": \"hello!\" }"; }
+   };
+}
+
+
+
+namespace Scene // Scene State layer (same layer height as a model layer, but contains the state, objects, etc in the scene)
 {
    class Scene
    {
@@ -85,7 +104,7 @@ namespace Scene
 
 
 
-///// Model Action layer
+///// Layer 4: Model Action layer
 
 
 
@@ -140,7 +159,7 @@ namespace Scene
 
 
 
-///// Action Factory layer - contains factory functions that act on the underlying models
+///// Layer 5: Action Factory Layer - contains factory functions that act on the underlying models
 
 
 
@@ -160,7 +179,7 @@ public:
 
 
 
-///// User interface layer - manages interactions from input and the actions that can be executed with them
+///// Layer 6: User Interface Layer - manages interactions from input and the actions that can be executed by the imputs
 
 
 
@@ -242,7 +261,7 @@ namespace UserInterface
 
 
 
-///// App Layer - feeds input from the system into the user interface layer
+///// Layer 7: App Layer - feeds input from the system into the user interface layer
 
 
 
@@ -279,7 +298,7 @@ public:
 
 
 
-///// Main
+///// Layer X: Executable Layer
 
 
 
