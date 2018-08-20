@@ -38,7 +38,13 @@ public:
 
 
 
-/////
+//////////////////////
+//////////////////////
+//////////////////////
+
+
+
+///// model layer, contains primitave classes
 
 
 
@@ -53,7 +59,38 @@ namespace Integer
       void increment() { i++; }
       void decrement() { i--; }
    };
+}
 
+
+
+//////// Scene State layer (same layer height as a model layer, but contains the state, objects, etc in the scene)
+
+namespace Scene
+{
+   class Scene
+   {
+   public:
+      Integer::Integer integer_a;
+      Integer::Integer integer_b;
+
+      //Widget widget_a;
+      //Widget widget_b;
+
+      Scene()
+         : integer_a(10)
+         , integer_b(100)
+      {}
+   };
+}
+
+
+
+///// Model Action layer
+
+
+
+namespace Integer
+{
    namespace Actions
    {
       class Increment : public ActionInterface
@@ -76,18 +113,54 @@ namespace Integer
          virtual void execute() override { klass->decrement(); }
       };
    }
+}
 
-   class ActionFactory
+
+
+namespace Scene
+{
+   namespace Actions
    {
-   public:
-      static ActionInterface* decrement_integer(Integer *integer) { return new Actions::Increment(integer); }
-      static ActionInterface* increment_integer(Integer *integer) { return new Actions::Decrement(integer); }
+      class IncrementAllIntegers : public ActionInterface
+      {
+      private:
+         Scene *scene;
+
+      public:
+         IncrementAllIntegers(Scene *scene) : ActionInterface("IncrementAllIntegers"), scene(scene)
+         {}
+         virtual void execute() override
+         {
+            scene->integer_a.increment();
+            scene->integer_b.increment();
+         }
+      };
    };
 }
 
 
 
-/////
+///// Action Factory layer - contains factory functions that act on the underlying models
+
+
+
+class ActionFactory
+{
+public:
+   static ActionInterface* decrement_integer(Integer::Integer *integer) { return new Integer::Actions::Increment(integer); }
+   static ActionInterface* increment_integer(Integer::Integer *integer) { return new Integer::Actions::Decrement(integer); }
+   static ActionInterface* increment_all_integers(Scene::Scene *scene) { return new Scene::Actions::IncrementAllIntegers(scene); }
+};
+
+
+
+//////////////////////
+//////////////////////
+//////////////////////
+
+
+
+///// User interface layer - manages interactions from input and the actions that can be executed with them
 
 
 
@@ -168,7 +241,9 @@ namespace UserInterface
 }
 
 
-/////
+
+///// App Layer - feeds input from the system into the user interface layer
+
 
 
 class App
@@ -203,7 +278,9 @@ public:
 };
 
 
-/////
+
+///// Main
+
 
 
 int main(int, char**)
@@ -213,5 +290,6 @@ int main(int, char**)
 
    return 0;
 }
+
 
 
